@@ -1,6 +1,6 @@
 package com.microservices.notification.service;
 
-import com.microservices.notification.order.OrderPlacedEvent;
+import com.microservices.order.event.OrderPlacedEvent;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -18,18 +18,18 @@ public class NotificationService {
     private final JavaMailSender javaMailSender;
 
     @KafkaListener(topics = "order-placed")
-    public void listen(OrderPlacedEvent orderPlacedEvent){
+    public void listen(OrderPlacedEvent orderPlacedEvent) {
         log.info("Got Message from order-placed topic {}", orderPlacedEvent);
         MimeMessagePreparator messagePreparator = mimeMessage -> {
             MimeMessageHelper messageHelper = new MimeMessageHelper(mimeMessage);
             messageHelper.setFrom("springshop@email.com");
-            messageHelper.setTo(orderPlacedEvent.getEmail().toString());
+            messageHelper.setTo(orderPlacedEvent.getEmail());
             messageHelper.setSubject(String.format("Your Order with OrderNumber %s is placed successfully", orderPlacedEvent.getOrderNumber()));
             messageHelper.setText(String.format("""
-                            Hi %s,%s
-
+                            Hi
+                            
                             Your order with order number %s is now placed successfully.
-
+                            
                             Best Regards
                             Spring Shop
                             """,

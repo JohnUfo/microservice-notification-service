@@ -1,4 +1,4 @@
-package com.microservices.notification.order;
+package com.microservices.order.event;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
